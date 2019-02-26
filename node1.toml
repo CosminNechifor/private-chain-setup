@@ -1,6 +1,6 @@
 [parity]
 chain = "private.json"
-base_path = "/tmp/parity1"
+base_path = "/home/$USER/private_chain/parity1"
 [network]
 port = 30301
 [rpc]
