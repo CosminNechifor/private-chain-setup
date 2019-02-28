@@ -1,8 +1,6 @@
 # this script assumes that you have at lease version 1.11
 # and it must be run inside the directory where the other files are
 
-
-
 setup_node1() {
     echo "Starting the configuration of the first node"
     parity --config ./data/node0_setup.toml &
@@ -39,32 +37,9 @@ setup_node2() {
     fuser -k 8541/tcp
 }
 
-# function used to connect the two nodes
-build_connection() {
-    echo "Starting node0 and node1"
-    parity --config ./data/node0.toml &
-    parity --config ./data/node1.toml --ui-port 8181 & 
-
-    echo "Waiting for the nodes to start"
-    sleep 10
-    
-    ENODE_NODE0=$( curl --data '{"jsonrpc":"2.0","method":"parity_enode","params":[],"id":0}' -H "Content-Type: application/json" -X POST localhost:8540 | python -c "import sys, json; print(json.load(sys.stdin)['result'])")
-    echo "enode node0:" $ENODE_NODE0
-
-    echo '{"jsonrpc":"2.0","method":"parity_addReservedPeer","params":["$ENODE_NODE0"],"id":0}' 
-
-    curl --data '{"jsonrpc":"2.0","method":"parity_addReservedPeer","params":["$ENODE_NODE0"],"id":0}' -H "Content-Type: application/json" -X POST localhost:8541
-
-
-
-
-
-}
-
 echo "starting setup"
 
 setup_node1
 setup_node2
-build_connection
 
 echo "setup executed"
